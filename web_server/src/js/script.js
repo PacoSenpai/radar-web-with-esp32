@@ -10,7 +10,7 @@ var cmTopx = 5;
 
 // Función para realizar la solicitud al servidor y mostrar la lista
 function getPointsFromServer() {
-    fetch('http://192.168.1.50:8000/api/get_points?group_name=group1')
+    fetch('http://localhost:8000/api/get_points?group_name=group1')
         .then(response => response.json())
         .then(data => writePoints(data.points))
         .catch(error => console.error('Error al obtener la lista:', error));

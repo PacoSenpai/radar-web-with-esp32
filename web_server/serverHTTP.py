@@ -4,7 +4,7 @@ import helper
 import urllib.parse
 
 
-IP = "192.168.1.50"
+IP = "localhost"
 PORT = 8000
 
 POINTS = {
