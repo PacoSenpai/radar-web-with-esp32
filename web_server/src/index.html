@@ -11,14 +11,12 @@
 <body>
     <!-- Contenedor para la imagen y la lista -->
     <div id="container" class="centered-div">
-        <div id="RadarContainer">
-            <h1>Radar</h1>
-            <!-- La etiqueta <img> para dibujar la imagen -->
-            <img src="./images/radar.png" alt="Radar">
+        <h1>Radar</h1>
+        <div id="canvasContainer">
+            <img id="radarImage" class="img" src="./images/radar.png" alt="Radar" width="496" height="288">
+            <canvas id="canvas" width="496" height="288"></canvas>
         </div>
-        <ul id="listaCadenas"></ul>
     </div>
-
 
 
     <!-- Incluir el archivo .js -->

@@ -1,23 +1,51 @@
+var canvasWith = document.getElementById("canvas").offsetWidth;
+var canvasHeight = document.getElementById("canvas").offsetHeight;
+
+
+
+var WithOffset = canvasWith/2;
+var heightOffset = canvasHeight - 35;
+var cmTopx = 5;
+
+
 // Función para realizar la solicitud al servidor y mostrar la lista
-function obtenerListaDelServidor() {
-    fetch('http://localhost:8000/api/obtener_cadenas')
+function getPointsFromServer() {
+    fetch('http://localhost:8000/api/get_points?group_name=group0')
         .then(response => response.json())
-        .then(data => mostrarLista(data.cadenas_recibidas))
+        .then(data => writePoints(data.points))
         .catch(error => console.error('Error al obtener la lista:', error));
 }
 
 // Función para mostrar la lista en el HTML
-function mostrarLista(cadenas) {
-    const listaElement = document.getElementById('listaCadenas');
-    listaElement.innerHTML = '';
+function writePoints(points) {
+    if (points.length <= 0) {
+        return
+    }
+    
+    //Get the canvas element and its 2D context
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
 
-    cadenas.forEach(cadena => {
-        const listItem = document.createElement('li');
-        listItem.textContent = cadena;
-        listaElement.appendChild(listItem);
+    // Draw dots for each point in the list
+    points.forEach(function(point) {
+        point = fromAngleDistanceToXandY(point);
+        console.log(point);
+        drawDot(point.x, point.y, ctx);
+        
     });
 }
 
+function drawDot(x, y, ctx) {
+    ctx.beginPath();                      // Start a new path
+    ctx.arc(x, y, 5, 0, 2 * Math.PI);   // Create a circle at (x, y) with a radius of 5
+    ctx.fillStyle = "red";                // Set the fill color to red
+    ctx.fill();                           // Fill the circle with the specified color
+    ctx.stroke();                         // Draw the outline of the circle
+}
+
+function fromAngleDistanceToXandY(point) {
+    return { "x": WithOffset + cmTopx*point.distance*Math.cos(point.angle), "y": heightOffset - cmTopx*point.distance*Math.sin(point.angle)};
+}
 
 // Llamar a la función para obtener la lista cada segundo
-setInterval(obtenerListaDelServidor, 1000);
+setInterval(getPointsFromServer, 1000);

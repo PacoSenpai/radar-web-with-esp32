@@ -1,13 +1,28 @@
 /* styles.css */
 
-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
+body{
+    text-align: center;
 }
 
-.centered-div {
-    text-align: center;
+.img{
+    position:absolute;
+    z-index:1;
+}
+
+#canvasContainer{
+    display:inline-block;
+    width:496px; 
+    height:288px;
+    margin: 0 auto; 
+    background: black; 
+    position:relative; 
+    border:1px solid black; 
+    border-radius: 2px; 
+    /*box-shadow: 0 5px 50px #333
+    */
+}
+
+#canvas{
+    position:relative;
+    z-index:20;
 }
