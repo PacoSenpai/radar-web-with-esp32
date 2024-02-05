@@ -30,7 +30,7 @@ def validate_angle(angle: float):
     try:
         angle = float(angle)
         
-        if angle < 0 or angle > PI2:
+        if angle <= 0 or angle >= PI2:
             return False
         
         return angle
@@ -45,7 +45,7 @@ def validate_distance(distance: float):
     """
     try:
         distance = float(distance)
-        if distance < 0 or distance > MAX_DISTANCE:
+        if distance <= 0 or distance >= MAX_DISTANCE:
             return False
         
         return distance

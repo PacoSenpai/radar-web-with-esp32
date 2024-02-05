@@ -75,6 +75,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             group_name = helper.validate_group_name(data.get('name', ''))
             angle = helper.validate_angle(data.get('angle', ''))
             distance = helper.validate_distance(data.get('distance', ''))
+            
             if group_name and angle and distance:            
                 response_message = f"Solicitud POST recibida con éxito. Group {group_name}, Angle {angle}, distance {distance}"
                 helper.add_point(POINTS, group_name, angle, distance)
