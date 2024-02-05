@@ -1,6 +1,8 @@
 PI = 3.14159265359
 PI2 = 2*PI
 
+MAX_DISTANCE = 40
+
 MAX_NUMBER_GROUPS = 10
 MAX_NUMBER_POINTS = 20
 
@@ -11,11 +13,10 @@ def validate_group_name(group_name: str):
     """
     if len(group_name) < 0 or len(group_name) > 7:
         return False
-    if not "group" in group_name:
+    if group_name[0:5] != "group":
         return False
-    
     try:
-        num = int(group_name[6:])
+        num = int(group_name[5:])
         return group_name
     except:
         return False
@@ -44,7 +45,7 @@ def validate_distance(distance: float):
     """
     try:
         distance = float(distance)
-        if distance < 0 or distance > 40:
+        if distance < 0 or distance > MAX_DISTANCE:
             return False
         
         return distance

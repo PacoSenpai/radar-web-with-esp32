@@ -31,7 +31,6 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         if parsed_url.path == '/api/get_points':
             group_name = query_params.get('group_name', [''])[0]
-
             
             if not group_name in POINTS.keys():
                 return
@@ -71,15 +70,17 @@ class RequestHandler(BaseHTTPRequestHandler):
         
         try:
             data = json.loads(post_data)
+            print(data)
             
             group_name = helper.validate_group_name(data.get('name', ''))
             angle = helper.validate_angle(data.get('angle', ''))
             distance = helper.validate_distance(data.get('distance', ''))
-
             if group_name and angle and distance:            
                 response_message = f"Solicitud POST recibida con éxito. Group {group_name}, Angle {angle}, distance {distance}"
                 helper.add_point(POINTS, group_name, angle, distance)
-                
+                print(response_message)
+            else:
+                response_message = "Wrong POST message."
                 
         except json.JSONDecodeError:
             response_message = "Error al decodificar JSON en la solicitud POST"
@@ -88,7 +89,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/plain")
         self.end_headers()
         self.wfile.write(response_message.encode('utf-8'))
-        print(POINTS)
         
         
 
