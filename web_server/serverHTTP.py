@@ -49,11 +49,11 @@ class RequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         self.server.logger.debug(f"Recived GET request from {self.client_address[0]}")
         
+        parsed_url = urllib.parse.urlparse(self.path)
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length).decode('utf-8')
-        path = post_data.get('path', '')
-        
-        if path == "/api/send_point":
+
+        if parsed_url.path == "/api/send_point":
             response_message = self._handle_api_send_point(post_data)
         
         else:
@@ -116,7 +116,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(response_data).encode('utf-8'))
         
         # Restart its points
-        #POINTS[group_name] = {"points": [], "points_number": 0}
+        POINTS[group_name] = {"points": [], "points_number": 0}
 
     def _handle_api_send_point(self, post_data: str):
         """Function to handle the requests from the API sendPoints

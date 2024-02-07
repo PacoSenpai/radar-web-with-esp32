@@ -48,8 +48,10 @@ def validate_group_name(group_name: str):
     Returns:
         Boolean: return True if valid group name, False in other cases.
     """
-    if len(group_name) < 0 or len(group_name) > 7:
+    if len(group_name) < 0 or len(group_name) >= 7:
         return False
+
+    group_name.lower()
     if group_name[0:5] != "group":
         return False
     try:
@@ -99,7 +101,7 @@ def add_point(points: dict, group_name: str, angle: float, distance :float):
                                   "points_number": 1
                                 }
     else:
-        if points[group_name]["number_points"] < MAX_NUMBER_POINTS:
+        if points[group_name]["points_number"] < MAX_NUMBER_POINTS:
             points[group_name]["points"].append({"distance": distance, "angle": angle})
             points[group_name]["points_number"] += 1
             
