@@ -20,4 +20,4 @@ if __name__ == "__main__":
         command = f'curl -X POST -H "Content-Type: application7json" -d {point}  http://localhost:8000/api/send_point'
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
         print(command)
-        time.sleep(0.05)
+        time.sleep(0.01)

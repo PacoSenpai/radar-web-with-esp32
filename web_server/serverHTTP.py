@@ -3,6 +3,10 @@ import json
 import helper
 import urllib.parse
 
+import concurrent.futures
+
+
+
 IP = "localhost"
 PORT = 8000
 
@@ -26,7 +30,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     
     def do_GET(self):
         self.server.logger.debug(f"Recived GET request from {self.client_address[0]}")
-        
+
         parsed_url = urllib.parse.urlparse(self.path)
         query_params = urllib.parse.parse_qs(parsed_url.query)
 
@@ -63,7 +67,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/plain")
         self.end_headers()
         self.wfile.write(response_message.encode('utf-8'))
-            
+          
     def _send_file(self, path: str):
         try:
             # Open and read the requested file
@@ -140,7 +144,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         return response_message
    
 class CustomHTTPServer(HTTPServer):
-    def __init__(self, server_address, RequestHandlerClass, logger):
+    def __init__(self, server_address, RequestHandlerClass, logger, max_threads=16, ):
         self.logger = logger
         super().__init__(server_address, RequestHandlerClass)
    
@@ -154,8 +158,12 @@ def run_server(ip = "localhost", port=8000):
     httpd.serve_forever()
 
 
-# Execute the server with the IP and PORT specified
-if __name__ == "__main__":
-    run_server(IP, PORT)
+if __name__ == '__main__':
+    # Create a thread pool with 10 worker threads
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        # Start the HTTP server
+        start_server_thread = executor.submit(run_server, IP, PORT)
 
+        # Wait for the HTTP server to start
+        start_server_thread.result()
 

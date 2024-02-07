@@ -109,5 +109,5 @@ document.getElementById("group_name_input").addEventListener("keypress", functio
 });
 
 // Call the function to obtain the points list every second
-setInterval(getPointsFromServer, 1000);
+setInterval(getPointsFromServer, 100);
 
