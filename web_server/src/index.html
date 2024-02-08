@@ -9,17 +9,20 @@
 </head>
 
 <body>
-    <!-- Contenedor para la imagen y la lista -->
+    <!-- Container of all page-->
     <div id="container" class="centered-div">
         <h1>Radar</h1>
         <div id="canvasContainer">
             <img id="radarImage" class="img" src="./images/radar.png" alt="Radar" width="496" height="288">
             <canvas id="canvas" width="496" height="288"></canvas>
         </div>
+        <h2>Nom del vostre grup</h2>
+        <input type="text" id="group_name_input" placeholder="group0" required maxlength="7">
+        <button id="sendButton" onclick="save_group_name()">Enviar</button>
+        <p id="current_group">Grup actual: group0</p>
     </div>
 
-
-    <!-- Incluir el archivo .js -->
-    <script src="./js/script.js"></script>
+    <!-- Include .js files-->
+    <script src="./js/scripts.js"></script>
 </body>
 </html>
