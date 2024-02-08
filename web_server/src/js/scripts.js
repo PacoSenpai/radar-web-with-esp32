@@ -4,7 +4,7 @@ var canvasHeight = document.getElementById("canvas").offsetHeight;
 var WithOffset = canvasWith/2;
 var heightOffset = canvasHeight - 35;
 
-const IP_SERVER = "localhost";
+const IP_SERVER = "192.168.255.89";
 const MAX_POINTS = 100;
 const REQUEST_PERIOD = 100; //ms
 
