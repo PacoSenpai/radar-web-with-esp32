@@ -3,9 +3,7 @@ import random
 import time
 
 PI = 3.14159265359
-
-
-command = """curl -X POST -H "Content-Type: application/json" -d '{"cadena": "HOLA QUE TAesfesL"}' http://localhost:8000/api/enviar_cadena"""
+SLEEP_TIME = 0.01
 
 group_name = "group1"
 
@@ -20,4 +18,4 @@ if __name__ == "__main__":
         command = f'curl -X POST -H "Content-Type: application7json" -d {point}  http://localhost:8000/api/send_point'
         result = subprocess.run(command, shell=True, capture_output=True, text=True)
         print(command)
-        time.sleep(0.01)
+        time.sleep(SLEEP_TIME)

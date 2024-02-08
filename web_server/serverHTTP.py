@@ -2,14 +2,14 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import helper
 import urllib.parse
-
 import concurrent.futures
-
 
 
 IP = "localhost"
 PORT = 8000
 
+
+# Points structure for save all the points not requested
 POINTS = {
     "group0": {
         "points": [ #distance in cm, angle in radiants
@@ -143,6 +143,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             
         return response_message
    
+   
 class CustomHTTPServer(HTTPServer):
     def __init__(self, server_address, RequestHandlerClass, logger, max_threads=16, ):
         self.logger = logger
@@ -155,8 +156,10 @@ def run_server(ip = "localhost", port=8000):
     logger = helper.Logger(__name__)
     httpd = CustomHTTPServer(server_address, RequestHandler, logger)
     print(f"Server executing on port {port} and address {ip}")
-    httpd.serve_forever()
-
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt as e:
+        print(f"Exception {e}. Task interrupted")
 
 if __name__ == '__main__':
     # Create a thread pool with 10 worker threads
@@ -164,6 +167,11 @@ if __name__ == '__main__':
         # Start the HTTP server
         start_server_thread = executor.submit(run_server, IP, PORT)
 
-        # Wait for the HTTP server to start
-        start_server_thread.result()
+        try:
+            # Wait for the HTTP server to start
+            start_server_thread.result()
+        except KeyboardInterrupt as e:
+            print(f"Exception: {e}. Terminating prosses...")
+            start_server_thread.cancel()
+            exit()
 
