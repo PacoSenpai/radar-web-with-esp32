@@ -3,15 +3,20 @@ var canvasHeight = document.getElementById("canvas").offsetHeight;
 
 var WithOffset = canvasWith/2;
 var heightOffset = canvasHeight - 35;
+
+const IP_SERVER = "localhost";
+const MAX_POINTS = 100;
+const REQUEST_PERIOD = 100; //ms
+
+
 var cmTopx = 5;
 var current_points = {"points": [], "points_number": 0};
-var MAX_POINTS = 100;
-
 var group_name = "group0";
 
-// Función para realizar la solicitud al servidor y mostrar la lista
+
+// Function to request the server
 function getPointsFromServer() {
-    fetch('http://localhost:8000/api/get_points?group_name=' + group_name)
+    fetch('http://' + IP_SERVER + ':8000/api/get_points?group_name=' + group_name)
         .then(response => response.json())
         .then(data => handleRecivedPoints(data))
         .catch(error => console.error('Error al obtener la lista:', error));
@@ -109,5 +114,5 @@ document.getElementById("group_name_input").addEventListener("keypress", functio
 });
 
 // Call the function to obtain the points list every second
-setInterval(getPointsFromServer, 100);
+setInterval(getPointsFromServer, REQUEST_PERIOD);
 
