@@ -1,7 +1,6 @@
-#include <HTTPClient.h>
 #include <WiFi.h>
 #include <ESP32Servo.h>
-#include "sendData.h"
+#include "sendData.hpp"
 
 #define SERVO_PIN 26
 
@@ -17,8 +16,9 @@ const char* ssid = "Motorola pau";
 const char* password = "montarto";
 
 const char* host = "192.168.46.89";
-const int httpPort = 8000;
+const unsigned int httpPort = 8000;
 long timeSendHttpReq = 0;
+
 
 
 // Variables for Servomotor
@@ -31,22 +31,22 @@ long timeServo = 0;
 // variables for sonar
 float distanceCm = 0.0;
 
-void moveServo(Servo &servo, float &angle, bool &forward){
-  if (forward){
-      servoAngle += stepAngle;
-    }else{
-      servoAngle -= stepAngle;
-    }
-    
-    if (servoAngle >= 180){
-      forward = !forward;
-    }
-    
-    if (servoAngle <= 0){
-      forward = !forward;
-    }
+void moveServo(Servo& servo, float& angle, bool& forward) {
+  if (forward) {
+    servoAngle += stepAngle;
+  } else {
+    servoAngle -= stepAngle;
+  }
 
-    servo.write(servoAngle);
+  if (servoAngle >= 180) {
+    forward = !forward;
+  }
+
+  if (servoAngle <= 0) {
+    forward = !forward;
+  }
+
+  servo.write(servoAngle);
 }
 
 float measureDistance(int triggerPin, int echoPin) {
@@ -57,7 +57,7 @@ float measureDistance(int triggerPin, int echoPin) {
   delayMicroseconds(10);
   digitalWrite(triggerPin, LOW);
   duration = pulseIn(echoPin, HIGH);  //mesure time of the pulse
-  return (float)duration * 0.0171;   //convert distance to cm (342*100/1000000)/2 -> x[cm] = v[cm/ms] * t[ms] = (342*100/1000000)/2 * duration
+  return (float)duration * 0.0171;    //convert distance to cm (342*100/1000000)/2 -> x[cm] = v[cm/ms] * t[ms] = (342*100/1000000)/2 * duration
 }
 
 void setup() {
@@ -81,12 +81,12 @@ void setup() {
   Serial.print("Conectado!");
   Serial.println("");
   Serial.println("IP: ");
-  Serial.println(WiFi.localIP());  
+  Serial.println(WiFi.localIP());
 }
 
 void loop() {
 
-  if ((millis() - timeServo) > SERVO_PERIOD){
+  if ((millis() - timeServo) > SERVO_PERIOD) {
     moveServo(servo, servoAngle, forward);
     distanceCm = measureDistance(TRIGGER_PIN, ECHO_PIN);
     Serial.print("Anaagulo: ");
@@ -96,10 +96,9 @@ void loop() {
     timeServo = millis();
   }
 
-  if ((millis() - timeSendHttpReq) > REQUEST_SEND_TIME){
+  if ((millis() - timeSendHttpReq) > REQUEST_SEND_TIME) {
     timeSendHttpReq = millis();
     float angleRad = servoAngle / 180 * 3.141592;
-    sendDataToServer(host, httpPort, "group0", angleRad, distanceCm);
+    bool a = wifi::sendDataToServer(host, httpPort, "group0", angleRad, distanceCm);
   }
-  
 }
