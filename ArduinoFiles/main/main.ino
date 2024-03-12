@@ -1,6 +1,7 @@
 #include <HTTPClient.h>
 #include <WiFi.h>
 #include <ESP32Servo.h>
+#include "sendData.h"
 
 #define SERVO_PIN 26
 
@@ -11,13 +12,11 @@
 #define ECHO_PIN 14
 #define MAX_DISTANCE 50
 
-// Cariables for wifi connection
-const char* ssid = "Prueba";
-const char* password = "Pedro123";
-WiFiClient client;
-bool connSucc = true;
+// Variables for wifi connection
+const char* ssid = "Motorola pau";
+const char* password = "montarto";
 
-const char* host = "192.168.255.89";
+const char* host = "192.168.46.89";
 const int httpPort = 8000;
 long timeSendHttpReq = 0;
 
@@ -28,8 +27,6 @@ float stepAngle = 10;
 bool forward = true;
 Servo servo;
 long timeServo = 0;
-
-bool client1 = true;
 
 // variables for sonar
 float distanceCm = 0.0;
@@ -84,14 +81,7 @@ void setup() {
   Serial.print("Conectado!");
   Serial.println("");
   Serial.println("IP: ");
-  Serial.println(WiFi.localIP());
-  do{
-    connSucc = client.connect(host, httpPort);
-    delay(500);
-    Serial.println("connecting web");
-  }
-  while (!connSucc);
-  
+  Serial.println(WiFi.localIP());  
 }
 
 void loop() {
@@ -108,35 +98,8 @@ void loop() {
 
   if ((millis() - timeSendHttpReq) > REQUEST_SEND_TIME){
     timeSendHttpReq = millis();
-    
-    if (!connSucc) 
-    {
-      Serial.println("Error conecting to website");
-    }
-    else
-    { 
-      char group[6];
-      if (client1){
-        sprintf(group, "%s","gorup1");
-      }else{
-        sprintf(group, "%s","gorup2");
-      }
-      client1 = !client1;
-      
-      char json[100];
-      char payload[256]; 
-      float angleRad = servoAngle/180 * 3.141592;
-      sprintf(json, "{\"name\" : \"%s\" , \"angle\": %.2f, \"distance\": %.2f}", group, angleRad, distanceCm);
-      sprintf(payload, "POST /api/send_point HTTP/1.1\r\nHost: 192.168.255.89:8000\r\nContent-Type: application/json\r\nContent-Length: %d\r\n\r\n%s\r\n\r\n", strlen(json), json);
-      
-      Serial.println("Sending to:");
-      Serial.print(host);
-      Serial.println(" -> ");
-      Serial.println(payload);
-
-      client.print(payload);
-    }
-    
+    float angleRad = servoAngle / 180 * 3.141592;
+    sendDataToServer(host, httpPort, "group0", angleRad, distanceCm);
   }
   
 }
